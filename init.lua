@@ -103,6 +103,7 @@ vim.g.have_nerd_font = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
 vim.opt.relativenumber = true
+vim.opt.nu = true -- Sets the current line number as the actual line rather than relative (0)
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -839,6 +840,36 @@ require('lazy').setup({
     config = true,
     -- use opts = {} for passing setup options
     -- this is equalent to setup({}) function
+  },
+  { -- Harpoon add utilities for moving between buffers with ease.
+    'ThePrimeagen/harpoon',
+    branch = 'harpoon2',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    config = function()
+      local harpoon = require 'harpoon'
+      -- REQUIRED
+      harpoon:setup()
+      -- REQUIRED
+      vim.keymap.set('n', '<leader>a', function()
+        harpoon:list():add()
+      end)
+      vim.keymap.set('n', '<C-m>', function()
+        harpoon.ui:toggle_quick_menu(harpoon:list())
+      end)
+
+      -- I don't find this useful now, but may want it in the future
+      -- vim.keymap.set('n', '<C-h>', function()
+      --   harpoon:list():select(1)
+      -- end)
+
+      -- Toggle previous & next buffers stored within Harpoon list
+      vim.keymap.set('n', '<C-p>', function()
+        harpoon:list():prev()
+      end)
+      vim.keymap.set('n', '<C-n>', function()
+        harpoon:list():next()
+      end)
+    end,
   },
 
   -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
